@@ -16,5 +16,6 @@ delay 5s
 :execute "dnspod_updater"
 ```
 3.Interface List→Interface 编辑 pppoe-out1(此处根据实际情况选择)→Dial Out
+
 **Profile**:pppoe-clien-profile
 
