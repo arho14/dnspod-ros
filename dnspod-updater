@@ -1,0 +1,39 @@
+#PPPoE 名称
+:local pppoe "pppoe-out1"
+
+#DNSPOD token (格式："xxxxx,xxxxxxxxxxxxxxxxxxx")
+:local token ""
+
+#域名
+:local domain ""
+
+#子域名(支持多个子域名)
+:local subdomains {"admin";"nas";"router"}
+
+
+=============以下内容一般不需要修改====================
+
+#获取pppoe 拨号ip
+:local ipadd [/ip address get [/ip address find interface=$pppoe] address]
+:set ipadd [:pick $ipadd 0 ([len $ipadd] -3)]
+
+#修改域名记录
+:local dname
+:local record
+:local recordid
+:local recordip
+:foreach i in=$subdomains do={
+#查询记录列表
+:set record [/tool fetch url="https://dnsapi.cn/Record.List" http-data="login_token=$token&format=json&domain=$domain&sub_domain=$i&record_type=A" as-value output=user]
+#获取id和ip
+:set record ($record->"data")
+:set record [:pick $record [:find $record "\"records\":"] [:len $record]]
+:set recordid [:pick $record ([:find $record "\"id\":\""]+6) [:find $record "\",\"ttl"]]
+:set recordip [:pick $record ([:find $record "\"value\":\""]+9) [:find $record "\",\"en"]]
+:if ($recordip!=$ipadd) do={
+:set record [/tool fetch url="https://dnsapi.cn/Record.Ddns" http-data="login_token=$token&format=json&domain=$domain&sub_domain=$i&record_id=$recordid&record_line_id=0&value=$ipadd"  as-value output=user]
+:log info ("[$i.$domain]成功更新IP为:$ipadd")
+} else={
+:log info ("[$i.$domain]无需更新IP")
+}
+}
