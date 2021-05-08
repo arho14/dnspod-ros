@@ -11,7 +11,7 @@
 :local subdomains {"admin";"nas";"router"}
 
 
-=============以下内容一般不需要修改====================
+#=============以下内容一般不需要修改====================
 
 #获取pppoe 拨号ip
 :local ipadd [/ip address get [/ip address find interface=$pppoe] address]
