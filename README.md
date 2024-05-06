@@ -2,7 +2,7 @@
 
 通过 PPPoE 拨号配置文件激发 DNSPOD API 查询域名解析来变更A记录。
 
-正常 PPPoE 拨号会改变 IP ，感觉作者很棒，比利用 System/Scheduler 定时轮询好的多。
+正常 PPPoE 拨号会改变 IP ，比利用 System/Scheduler 定时轮询好的多。
 
 
 
